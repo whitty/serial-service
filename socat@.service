@@ -1,0 +1,13 @@
+[Unit]
+Description=Socat Serial Port Service (%I)
+Wants=network.target
+BindsTo=%i.device
+After=%i.device
+
+[Service]
+Type=simple
+ExecStart=/usr/share/serial-service/serial-service /%I
+Environment=DEVNAME=%I
+
+[Install]
+WantedBy=multi-user.target

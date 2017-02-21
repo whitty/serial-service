@@ -1,12 +1,18 @@
 #!/bin/sh
 
-for arg; do
-  echo $arg
-done
+set -e
 
-echo "------"
-env
+dev=$1
+shift
 
-socat -v tcp-l:5555,reuseaddr file:/dev/ttyUSB0,nonblock
+if [ -z "$dev" ]; then
+  echo No device
+  exit 1
+fi
+
+name=$(basename $dev)
+full_sys_path=$(readlink -e /sys/class/tty/$name)
+
+socat -v tcp-l:5555,reuseaddr file:/$dev,nonblock
 #,waitlock=/var/run/tty0.lock
 #false

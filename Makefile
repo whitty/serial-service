@@ -1,11 +1,12 @@
 .PHONY: install log
 
 install:
-	sudo systemctl disable ttyUSBN || true
-	sudo cp ttyUSBN.service /lib/systemd/system/
+	sudo systemctl stop socat@dev-ttyUSB0.service
+	sudo cp socat@.service /etc/systemd/system/
 	sudo cp serial.rules /etc/udev/rules.d/90-serial.rules
+	sudo install -m 0755 -t /usr/share/serial-service serial-service
 	sudo udevadm control --reload-rules
-	sudo systemctl enable ttyUSBN
+	sudo systemctl daemon-reload
 
 log:
-	sudo journalctl -u ttyUSBN | cat
+	sudo journalctl -u socat@dev-ttyUSB0.service | cat
