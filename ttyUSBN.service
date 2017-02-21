@@ -1,8 +1,12 @@
 [Unit]
 Description=Serial Port Service
 Wants=network.target
-BindsTo=sys-devices-platform-soc-20980000.usb-usb1-1\x2d1-1\x2d1.2-1\x2d1.2:1.0-ttyUSB0-tty-ttyUSB0.device
+BindsTo=dev-ttyUSB0.device
+After=dev-ttyUSB0.device
 
 [Service]
 Type=simple
-ExecStart=/home/pi/work/serial-service/serial-service
+ExecStart=/home/pi/work/serial-service/serial-service start
+
+[Install]
+WantedBy=multi-user.target

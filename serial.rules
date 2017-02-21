@@ -1,0 +1,1 @@
+KERNEL=="ttyUSB*", ACTION=="add",  PROGRAM="/bin/systemd-escape -p --template=ttyUSBN@.service $env{DEVNAME}", ENV{SYSTEMD_WANTS}+="ttyUSBN.service"

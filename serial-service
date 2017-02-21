@@ -7,4 +7,6 @@ done
 echo "------"
 env
 
-false
+socat -v tcp-l:5555,reuseaddr file:/dev/ttyUSB0,nonblock
+#,waitlock=/var/run/tty0.lock
+#false
