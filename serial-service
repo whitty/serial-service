@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -11,8 +11,24 @@ if [ -z "$dev" ]; then
 fi
 
 name=$(basename $dev)
-full_sys_path=$(readlink -e /sys/class/tty/$name)
 
-socat -v tcp-l:5555,reuseaddr file:/$dev,nonblock
-#,waitlock=/var/run/tty0.lock
-#false
+if [ -e /sys/bus/usb-serial/devices/$name ]; then
+  full_sys_path=$(readlink -e /sys/bus/usb-serial/devices/$name)
+  usb_connection=$(basename $(dirname $full_sys_path)) # eg 1-1.2:1.0
+  usb_port=$(echo $usb_connection | cut -d: -f1)
+else
+  full_sys_path=$(readlink -e /sys/class/tty/$name)
+  echo "Can't handle non-USB serial yet: $name"
+  exit 2
+fi
+
+declare -A conf
+# static configuration - we'll move it to a config file one day
+conf[1-1.2]=5555
+conf[1-1.3]=5556
+conf[1-1.4]=5557
+conf[1-1.5]=5558
+
+tcp_port=${conf[$usb_port]}
+echo "Starting serial service on port $tcp_port for $dev on USB $usb_port"
+socat -v tcp-l:$tcp_port,reuseaddr file:/$dev,nonblock
