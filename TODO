@@ -1,0 +1,3 @@
+Rename service from socat@ to serial-service@
+Don't run as root
+Actually make configuration work
