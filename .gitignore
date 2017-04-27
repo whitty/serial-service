@@ -1,1 +1,7 @@
 *~
+debian/serial-service
+debian/files
+debian/serial-service.debhelper.log
+debian/serial-service.substvars
+debian/*.ex
+debian/*.EX
